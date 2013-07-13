@@ -10,6 +10,10 @@
 	<form action="getClassServlet" method="post">
 		<input type="text" name="userId"> 
 		<input type="password" name="password"> 
+		<select name="method">
+			<option value="xml">xml</option>
+			<option value="json">json</option>
+		</select>
 		<select name="term">
 			<option value="＝所有学期＝">＝所有学期＝</option>
 			<option value="1999/2000(1)">1999/2000(1)</option>

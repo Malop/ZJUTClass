@@ -27,11 +27,12 @@ public class getClassServlet extends HttpServlet{
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		PrintWriter out = response.getWriter();
-		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		
 		
 		String userId = request.getParameter("userId");
 		String password = request.getParameter("password");
 		String term = request.getParameter("term");
+		String method = request.getParameter("method");
 		
 		myHttpUtil = new HttpUtil(userId,password,term);
 		try {
@@ -47,8 +48,9 @@ public class getClassServlet extends HttpServlet{
 				classesList = queryHtmlPaser.getClasses();
 				if(classesList.size() == 0){
 					out.print("<script language='javascript'>alert('该学期没有你的课表信息！请重新输入！');window.location.href='index.jsp';</script>");
-				}else{
+				}else if(method.equals("xml")){
 					
+					out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 					out.println("<classes>");
 					for(int i=0;i<classesList.size();i++){
 						out.println("<class>");
@@ -75,6 +77,21 @@ public class getClassServlet extends HttpServlet{
 						out.println("</class>");
 					}
 					out.println("</classes>");
+				}else if(method.equals("json")){
+					out.print("{\"courses\":[");
+					for(int j=0;j<classesList.size();j++){
+						out.print("{\"className\":\""+classesList.get(j).getClassName()+"\",");
+						out.print("\"faculty\":\""+classesList.get(j).getFaculty()+"\",");
+						out.print("\"credit\":\""+classesList.get(j).getCredit()+"\",");
+						out.print("\"times\":\""+classesList.get(j).getTimes()+"\",");
+						out.print("\"address\":\""+classesList.get(j).getAddress()+"\",");
+						out.print("\"type\":\""+classesList.get(j).getType()+"\"}");
+						if(j != classesList.size()-1){
+							out.print(",");
+						}else{
+							out.print("]}");
+						}
+					}
 				}
 			}
 			
